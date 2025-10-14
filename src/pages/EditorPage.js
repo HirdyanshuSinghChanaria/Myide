@@ -42,7 +42,11 @@ const EditorPage = () => {
 
       //listen to joined event
       socketRef.current.on(ACTIONS.JOINED, ({ users, username, socketID }) => {
-        if (username && username !== location.state.username) {
+        if (
+          username &&
+          location.state &&
+          username !== location.state.username
+        ) {
           toast.success(`${username} has joined the room.`);
         }
         setUsers(users); //updating the users state with the users received from the server
@@ -75,7 +79,11 @@ const EditorPage = () => {
 
       //listen to disconnected event
       socketRef.current.on(ACTIONS.DISCONNECTED, ({ username }) => {
-        if (username && username !== location.state.username) {
+        if (
+          username &&
+          location.state &&
+          username !== location.state.username
+        ) {
           toast.success(`${username} has left the room.`);
         }
         setUsers((prevUsers) =>
@@ -115,7 +123,7 @@ const EditorPage = () => {
 
   const leaveRoom = () => {
     socketRef.current.emit(ACTIONS.DISCONNECTED, {
-      username: location.state.username,
+      username: location.state ? location.state.username : undefined,
       socketID: socketRef.current.id,
     });
     socketRef.current.disconnect();
@@ -124,6 +132,7 @@ const EditorPage = () => {
 
   if (!location.state) {
     reactNavigator('/');
+    return null;
   }
 
   return (

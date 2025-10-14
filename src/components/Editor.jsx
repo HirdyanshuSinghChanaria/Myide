@@ -8,7 +8,7 @@ import Output from '../components/Output';
 
 
 const CodeEditor = ({socketRef, roomID, onCodeChange, onLanguageChange}) => {
-  const [value, setValue] = useState({});
+  const [value, setValue] = useState('');
   const [language, setLanguage] = useState("Choose Language");
 
   
@@ -37,7 +37,7 @@ const CodeEditor = ({socketRef, roomID, onCodeChange, onLanguageChange}) => {
   
 
   useEffect(() => {
-    setValue(CODE_SNIPPETS[language]);
+    setValue(CODE_SNIPPETS[language] || '');
   },[language]);
 
   //handle code change
@@ -100,8 +100,8 @@ const CodeEditor = ({socketRef, roomID, onCodeChange, onLanguageChange}) => {
                   renderWhitespace: "all",
                   background: "#232946"
                 }}
-                language ={language} 
-                value={value}
+                language={language} 
+                value={typeof value === 'string' ? value : ''}
                 onChange={handleEditorChange}
           />
           <br></br>
